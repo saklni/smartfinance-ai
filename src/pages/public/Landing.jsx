@@ -1,298 +1,490 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+// src/pages/public/landing.jsx
+import { useState, useEffect, useRef, useCallback } from "react";
 import "../../styles/landing.css";
 
-/* ─── Data ──────────────────────────────────────────────────── */
-
-const NAV_LINKS = ["Home", "Features", "How It Works", "Contact"];
-
-const FEATURES = [
-  {
-    icon: (
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <rect x="2" y="3" width="20" height="18" rx="3" stroke="#4F46E5" strokeWidth="1.8" />
-        <path d="M7 8h10M7 12h6" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="16" cy="15" r="3" fill="#4F46E5" opacity="0.15" stroke="#4F46E5" strokeWidth="1.5" />
-        <path d="M15 15l.8.8L17 14" stroke="#4F46E5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: "Income & Expense Input",
-    desc: "Seamlessly sync accounts or manually log transactions with lightning speed. AI categorizes everything instantly.",
-    accent: false,
-  },
-  {
-    icon: (
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <path d="M4 6h16M4 12h10M4 18h7" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="18" cy="16" r="4" fill="white" opacity="0.2" stroke="white" strokeWidth="1.5" />
-        <path d="M16.5 16l1 1 2-2" stroke="white" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: "Smart Categories",
-    desc: "Auto-tagging learns from your habits, organizing your spending into meaningful buckets.",
-    accent: true,
-  },
-  {
-    icon: (
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <rect x="2" y="2" width="9" height="9" rx="2" stroke="#4F46E5" strokeWidth="1.8" />
-        <rect x="13" y="2" width="9" height="9" rx="2" stroke="#4F46E5" strokeWidth="1.8" />
-        <rect x="2" y="13" width="9" height="9" rx="2" stroke="#4F46E5" strokeWidth="1.8" />
-        <path d="M17 13v9M13 17h9" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Personalized Dashboard",
-    desc: "Your entire financial life in a single, high-fidelity overview.",
-    accent: false,
-  },
-  {
-    icon: (
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-        <path d="M3 17l4-5 4 3 4-6 4 4" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="19" cy="5" r="3" fill="#4F46E5" opacity="0.15" stroke="#4F46E5" strokeWidth="1.5" />
-        <path d="M18 5l.8.8L20.5 4" stroke="#4F46E5" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: "Spending Analysis",
-    desc: "Deep dive into where your money goes with behavioral patterns and trend forecasting.",
-    accent: false,
-  },
-];
-
-const STEPS = [
-  {
-    num: "1",
-    label: "Input",
-    desc: "Connect your bank or scan receipts. We handle the data entry.",
-    icon: (
-      <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
-        <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="#4F46E5" strokeWidth="1.8" />
-        <path d="M8 12h8M12 8v8" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    num: "2",
-    label: "Analyze",
-    desc: "AI scans thousands of data points to find hidden patterns.",
-    icon: (
-      <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" stroke="#4F46E5" strokeWidth="1.8" />
-        <path d="M12 7v5l3 3" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    num: "3",
-    label: "Insights",
-    desc: "Get actionable reports that help you spend less and save more.",
-    icon: (
-      <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
-        <path d="M12 2l1.5 4.5h4.5l-3.75 2.75 1.5 4.5L12 11.25l-3.75 2.5 1.5-4.5L6 6.5h4.5z" stroke="#4F46E5" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="M12 14v7M8 21h8" stroke="#4F46E5" strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-];
-
-/* ─── Hook ──────────────────────────────────────────────────── */
-
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true); },
-      { threshold }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-
-  return [ref, inView];
+// ─── HERO IMAGE ─────────────────────────────────────────────
+let heroSrc;
+try {
+  heroSrc = new URL("../../assets/images/HERO.png", import.meta.url).href;
+} catch {
+  heroSrc = null;
 }
 
-/* ─── Main Component ────────────────────────────────────────── */
+// ─── FEATURES DATA ──────────────────────────────────────────
+const features = [
+  {
+    id: 1,
+    icon: "🗂",
+    title: "Income & Expense Input",
+    desc: "Seamlessly sync accounts or manually log transactions with lightning speed. AI categorizes everything instantly.",
+    variant: "",
+  },
+  {
+    id: 2,
+    icon: "✦",
+    title: "Smart Categories",
+    desc: "Auto-tagging learns from your habits, organizing your spending into meaningful buckets.",
+    variant: "purple",
+  },
+  {
+    id: 3,
+    icon: "⊞",
+    title: "Personalized Dashboard",
+    desc: "Your entire financial life in a single, high-fidelity overview.",
+    variant: "",
+  },
+  {
+    id: 4,
+    icon: "📈",
+    title: "Spending Analysis",
+    desc: "Deep dive into where your money goes with behavioral patterns and trend forecasting.",
+    variant: "",
+  },
+];
 
-export default function SmartFinanceAI() {
-  const [dark, setDark] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
+// ─── STEPS DATA ──────────────────────────────────────────────
+const steps = [
+  {
+    id: 1,
+    icon: "⇥",
+    label: "1. Input",
+    desc: "Connect your bank or scan receipts. We handle the data entry.",
+  },
+  {
+    id: 2,
+    icon: "🔍",
+    label: "2. Analyze",
+    desc: "AI scans thousands of data points to find hidden patterns.",
+  },
+  {
+    id: 3,
+    icon: "✦",
+    label: "3. Insights",
+    desc: "Get actionable reports that help you spend less and save more.",
+  },
+];
 
-  // Section refs for smooth scroll navigation
-  const heroSectionRef    = useRef(null);
-  const featureSectionRef = useRef(null);
-  const stepsSectionRef   = useRef(null);
-  const footerRef         = useRef(null);
+// ─── NAVBAR HEIGHT (px) — adjust if you change navbar height ──
+const NAVBAR_HEIGHT = 68;
 
-  // InView refs for scroll animations
-  const [heroRef, heroIn]   = useInView(0.1);
-  const [featRef, featIn]   = useInView(0.1);
-  const [stepsRef, stepsIn] = useInView(0.1);
+// ─── COMPONENT ───────────────────────────────────────────────
+export default function Landing() {
+  const [theme, setTheme] = useState("light");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
-  const scrollToSection = (section) => {
-    if (!section.current) return;
-    const top = section.current.getBoundingClientRect().top + window.scrollY - 68;
-    window.scrollTo({ top, behavior: "smooth" });
-  };
+  // Section refs for smooth scroll + active detection
+  const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const howItWorksRef = useRef(null);
+  const footerRef = useRef(null);
 
+  // Scroll-reveal refs
+  const revealRefs = useRef([]);
+
+  // ── Apply theme ────────────────────────────────────────────
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
+  // ── Smooth scroll with offset (accounts for fixed navbar) ──
+  const scrollToSection = useCallback((ref) => {
+    setMenuOpen(false);
+    if (!ref?.current) return;
+    const top =
+      ref.current.getBoundingClientRect().top +
+      window.scrollY -
+      NAVBAR_HEIGHT;
+    window.scrollTo({ top, behavior: "smooth" });
   }, []);
 
-  return (
-    <div className={`app${dark ? " dark" : ""}`}>
+  // ── Active section tracking via IntersectionObserver ───────
+  useEffect(() => {
+    // Map each section id → ref
+    const sections = [
+      { id: "home", ref: heroRef },
+      { id: "features", ref: featuresRef },
+      { id: "how-it-works", ref: howItWorksRef },
+      { id: "contact", ref: footerRef },
+    ];
 
-      {/* ── Navbar ── */}
-      <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
-        <div className="navbar__inner">
-          <span className="navbar__brand">Smart Finance AI</span>
-          <div className="navbar__links">
-            {NAV_LINKS.map((link, i) => (
-              <span
-                key={link}
-                className={`nav-link${i === 0 ? " nav-link--active" : ""}`}
-                onClick={() => {
-                  if (link === "Home")         scrollToSection(heroSectionRef);
-                  if (link === "Features")     scrollToSection(featureSectionRef);
-                  if (link === "How It Works") scrollToSection(stepsSectionRef);
-                  if (link === "Contact")      scrollToSection(footerRef);
-                }}
+    // rootMargin pushes the "trigger line" down by navbar height
+    // so the section is considered active when its top clears the navbar
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.dataset.section);
+          }
+        });
+      },
+      {
+        rootMargin: `-${NAVBAR_HEIGHT}px 0px -55% 0px`,
+        threshold: 0,
+      }
+    );
+
+    sections.forEach(({ id, ref }) => {
+      if (ref.current) {
+        ref.current.dataset.section = id;
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // ── Scroll-reveal observer ─────────────────────────────────
+  useEffect(() => {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    revealRefs.current.forEach((el) => {
+      if (el) revealObserver.observe(el);
+    });
+
+    return () => revealObserver.disconnect();
+  }, []);
+
+  const addReveal = (el) => {
+    if (el && !revealRefs.current.includes(el)) {
+      revealRefs.current.push(el);
+    }
+  };
+
+  // ── CTA handler ───────────────────────────────────────────
+  const handleGetStarted = () => {
+    window.location.href = "/login";
+  };
+
+  // ── Helper: nav link class ─────────────────────────────────
+  const navClass = (id) => (activeSection === id ? "nav-active" : "");
+
+  return (
+    <>
+      {/* ════════════════════════════════════════
+          NAVBAR
+      ════════════════════════════════════════ */}
+      <nav className="navbar">
+        <div className="navbar-inner">
+          {/* Logo */}
+          <span className="navbar-logo">
+            Smart<span>Finance</span> AI
+          </span>
+
+          {/* Desktop Links */}
+          <ul className="navbar-links">
+            <li>
+              <a
+                className={navClass("home")}
+                href="#home"
+                onClick={(e) => { e.preventDefault(); scrollToSection(heroRef); }}
               >
-                {link}
-              </span>
-            ))}
-          </div>
-          <div className="navbar__actions">
-            <button className="dark-toggle" onClick={() => setDark(!dark)} aria-label="Toggle dark mode">
-              {dark ? "☀️" : "🌙"}
-            </button>
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                className={navClass("features")}
+                href="#features"
+                onClick={(e) => { e.preventDefault(); scrollToSection(featuresRef); }}
+              >
+                Features
+              </a>
+            </li>
+            <li>
+              <a
+                className={navClass("how-it-works")}
+                href="#how-it-works"
+                onClick={(e) => { e.preventDefault(); scrollToSection(howItWorksRef); }}
+              >
+                How It Works
+              </a>
+            </li>
+            <li>
+              <a
+                className={navClass("contact")}
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToSection(footerRef); }}
+              >
+                Contact
+              </a>
+            </li>
+          </ul>
+
+          {/* Right side */}
+          <div className="navbar-right">
             <button
-              className="btn-primary btn-primary--sm"
-              onClick={() => navigate("/login")}
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
             >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
+            <button className="btn-get-started" onClick={handleGetStarted}>
               Get Started
             </button>
+
+            {/* Hamburger */}
+            <button
+              className={`hamburger ${menuOpen ? "open" : ""}`}
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="Toggle menu"
+            >
+              <span />
+              <span />
+              <span />
+            </button>
           </div>
+        </div>
+
+        {/* Mobile Dropdown */}
+        <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+          <a
+            className={navClass("home")}
+            href="#home"
+            onClick={(e) => { e.preventDefault(); scrollToSection(heroRef); }}
+          >
+            Home
+          </a>
+          <a
+            className={navClass("features")}
+            href="#features"
+            onClick={(e) => { e.preventDefault(); scrollToSection(featuresRef); }}
+          >
+            Features
+          </a>
+          <a
+            className={navClass("how-it-works")}
+            href="#how-it-works"
+            onClick={(e) => { e.preventDefault(); scrollToSection(howItWorksRef); }}
+          >
+            How It Works
+          </a>
+          <a
+            className={navClass("contact")}
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); scrollToSection(footerRef); }}
+          >
+            Contact
+          </a>
+          <a className="btn-mobile-started" href="/login">
+            Get Started
+          </a>
         </div>
       </nav>
 
-      {/* ── Hero ── */}
-      <section
-        className="hero"
-        ref={(el) => { heroSectionRef.current = el; heroRef.current = el; }}
-      >
-        <div>
-          <h1 className={`hero__title fade-up${heroIn ? " in" : ""}`}>
-            Manage Your Money
-          </h1>
-          <h1 className={`hero__title--gradient fade-up stagger-1${heroIn ? " in" : ""}`}>
-            Smarter with AI
-          </h1>
-          <p className={`hero__desc fade-up stagger-2${heroIn ? " in" : ""}`}>
-            Experience the next generation of personal finance. Automated tracking,
-            predictive analysis, and intelligent insights designed to grow your wealth.
-          </p>
-          <button className={`btn-primary fade-up stagger-3${heroIn ? " in" : ""}`}>
-            Get Started Free
-          </button>
-        </div>
-        <div className={`hero__illustration fade-up stagger-4${heroIn ? " in" : ""}`}>
-          <img
-            src="/assets/image/HERO.png"
-            alt="Smart Finance AI Dashboard"
-            className="hero__image"
-          />
+      {/* ════════════════════════════════════════
+          HERO SECTION
+      ════════════════════════════════════════ */}
+      <section className="hero" id="home" ref={heroRef}>
+        <div className="hero-inner">
+          {/* Left: text */}
+          <div className="hero-content">
+            <h1
+              className="reveal"
+              ref={addReveal}
+            >
+              Manage Your Money
+              <span className="blue">Smarter with AI</span>
+            </h1>
+            <p
+              className="reveal reveal-delay-1"
+              ref={addReveal}
+            >
+              Experience the next generation of personal finance. Automated
+              tracking, predictive analysis, and intelligent insights designed
+              to grow your wealth.
+            </p>
+            <button
+              className="btn-hero reveal reveal-delay-2"
+              ref={addReveal}
+              onClick={handleGetStarted}
+            >
+              Get Started Free
+            </button>
+          </div>
+
+          {/* Right: image */}
+          <div className="hero-image reveal reveal-delay-3" ref={addReveal}>
+            {heroSrc ? (
+              <img src={heroSrc} alt="Smart Finance AI Dashboard Preview" />
+            ) : (
+              /* Fallback placeholder when no image is present */
+              <div
+                style={{
+                  width: "100%",
+                  minHeight: "340px",
+                  borderRadius: "24px",
+                  background:
+                    "linear-gradient(135deg, #eef0ff 0%, #dde3ff 100%)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "12px",
+                  color: "#3b5bfc",
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  border: "1px dashed #b4bffe",
+                }}
+              >
+                <span style={{ fontSize: "3rem" }}>📊</span>
+                <span>Place HERO.png in src/assets/images/</span>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* ── Capabilities ── */}
-      <section className="capabilities" ref={featureSectionRef}>
-        <div className="capabilities__inner" ref={featRef}>
-          <div className="section-header">
-            <span className="section-eyebrow">Capabilities</span>
-            <h2 className="section-title">Powerful Intelligence</h2>
-          </div>
+      {/* ════════════════════════════════════════
+          FEATURES SECTION
+      ════════════════════════════════════════ */}
+      <section className="features" id="features" ref={featuresRef}>
+        <div className="features-inner">
+          <p className="section-label reveal" ref={addReveal}>
+            CAPABILITIES
+          </p>
+          <h2 className="section-title reveal reveal-delay-1" ref={addReveal}>
+            Powerful Intelligence
+          </h2>
 
           <div className="features-grid">
-            {FEATURES.map((f, i) => (
+            {/* 4 feature cards */}
+            {features.map((f, i) => (
               <div
-                key={f.title}
-                className={`feature-card ${f.accent ? "feature-card--accent" : "feature-card--default"} fade-up stagger-${i + 1}${featIn ? " in" : ""}`}
+                key={f.id}
+                className={`feature-card ${f.variant} reveal reveal-delay-${(i % 3) + 1}`}
+                ref={addReveal}
               >
-                <div className="feature-card__icon-wrap">{f.icon}</div>
-                <h3 className="feature-card__title">{f.title}</h3>
-                <p className="feature-card__desc">{f.desc}</p>
+                <div className="feature-icon">{f.icon}</div>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+              </div>
+            ))}
+
+            {/* Full-width AI Recommendations card */}
+            <div
+              className="feature-card full-width reveal reveal-delay-2"
+              ref={addReveal}
+            >
+              <div className="feature-content">
+                <h3>AI Recommendations</h3>
+                <p>
+                  Our engine analyzes your history to suggest savings
+                  opportunities and investment strategies tailored to your
+                  goals.
+                </p>
+              </div>
+              <button className="btn-activate" onClick={handleGetStarted}>
+                Activate Insights
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          HOW IT WORKS SECTION
+      ════════════════════════════════════════ */}
+      <section className="how-it-works" id="how-it-works" ref={howItWorksRef}>
+        <div className="how-it-works-inner">
+          <h2 className="section-title reveal" ref={addReveal}>
+            The Path to Prosperity
+          </h2>
+          <p className="section-subtitle reveal reveal-delay-1" ref={addReveal}>
+            Three simple steps to financial clarity.
+          </p>
+
+          <div className="steps-grid">
+            {steps.map((s, i) => (
+              <div
+                key={s.id}
+                className={`step reveal reveal-delay-${i + 1}`}
+                ref={addReveal}
+              >
+                <div className="step-icon-wrap">{s.icon}</div>
+                <h3>{s.label}</h3>
+                <p>{s.desc}</p>
               </div>
             ))}
           </div>
-
-          <div className={`ai-banner fade-up stagger-5${featIn ? " in" : ""}`}>
-            <div>
-              <h3 className="ai-banner__title">AI Recommendations</h3>
-              <p className="ai-banner__desc">
-                Our engine analyzes your history to suggest savings opportunities and
-                investment strategies tailored to your goals.
-              </p>
-            </div>
-            <button className="btn-outline">Activate Insights</button>
-          </div>
         </div>
       </section>
 
-      {/* ── How It Works ── */}
-      <section
-        className="how-it-works"
-        ref={(el) => { stepsSectionRef.current = el; stepsRef.current = el; }}
-      >
-        <div className="how-it-works__header">
-          <h2 className="how-it-works__title">The Path to Prosperity</h2>
-          <p className="how-it-works__sub">Three simple steps to financial clarity.</p>
-        </div>
-        <div className="steps-grid">
-          <div className="steps-connector" />
-          {STEPS.map((s, i) => (
-            <div key={s.label} className={`step fade-up stagger-${i + 1}${stepsIn ? " in" : ""}`}>
-              <div className="step__icon-wrap">{s.icon}</div>
-              <div className="step__label">{s.num}. {s.label}</div>
-              <p className="step__desc">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ════════════════════════════════════════
+          FOOTER / CONTACT SECTION
+      ════════════════════════════════════════ */}
+      <footer className="footer" id="contact" ref={footerRef}>
+        <div className="footer-inner">
+          {/* Brand */}
+          <div className="footer-brand">
+            <span className="navbar-logo">
+              Smart<span>Finance</span> AI
+            </span>
+            <p>© 2026 Smart Finance AI. Precision in every transaction.</p>
+          </div>
 
-      {/* ── Footer ── */}
-      <footer className="footer" ref={footerRef}>
-        <div className="footer__inner">
-          <div>
-            <div className="footer__brand">Smart Finance AI</div>
-            <div className="footer__copy">© 2024 Smart Finance AI. Precision in every transaction.</div>
+          {/* Company links */}
+          <div className="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li>
+                <a href="#">About Us</a>
+              </li>
+              <li>
+                <a href="#">Careers</a>
+              </li>
+              <li>
+                <a href="#">Support</a>
+              </li>
+            </ul>
           </div>
-          <div className="footer__links">
-            <div>
-              <div className="footer__col-title">Company</div>
-              {["About Us", "Careers", "Support"].map((l) => (
-                <div key={l} className="footer__link">{l}</div>
-              ))}
+
+          {/* Legal links */}
+          <div className="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li>
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#">Terms of Service</a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social icons */}
+          <div className="footer-col">
+            <h4>Follow Us</h4>
+            <div className="footer-socials">
+              <button className="social-btn" aria-label="Twitter / X">
+                𝕏
+              </button>
+              <button className="social-btn" aria-label="LinkedIn">
+                in
+              </button>
             </div>
-            <div>
-              <div className="footer__col-title">Legal</div>
-              {["Privacy Policy", "Terms of Service"].map((l) => (
-                <div key={l} className="footer__link">{l}</div>
-              ))}
-            </div>
           </div>
-          <div className="footer__socials">
-            {["𝕏", "in"].map((icon) => (
-              <button key={icon} className="footer__social-btn">{icon}</button>
-            ))}
-          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <p>© 2026 Smart Finance AI. All rights reserved.</p>
+          <p>Built with ❤️ for smarter finances.</p>
         </div>
       </footer>
-
-    </div>
+    </>
   );
 }
