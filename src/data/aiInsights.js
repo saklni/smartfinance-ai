@@ -1,14 +1,16 @@
-export const aiInsights = [
+export const ai_insights = [
   {
     id: 1,
     user_id: 2,
-    insight_text: "Pengeluaran terbesar kamu ada di kategori Makanan",
-    created_at: "2026-04-21T12:00:00Z"
+    insight_text: "Pengeluaran kamu cukup tinggi di makanan. Coba kurangi 10% untuk menabung.",
+    type: "warning",
+    created_at: "2026-02-05"
   },
   {
     id: 2,
-    user_id: 2,
-    insight_text: "Cobalah mengurangi pengeluaran transport sebesar 10%",
-    created_at: "2026-04-22T12:00:00Z"
+    user_id: 3,
+    insight_text: "Kamu memiliki pemasukan tambahan dari freelance, bagus untuk investasi.",
+    type: "suggestion",
+    created_at: "2026-02-05"
   }
 ];

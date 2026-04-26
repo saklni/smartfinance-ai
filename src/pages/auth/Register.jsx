@@ -1,6 +1,6 @@
-// src/pages/public/register.jsx
 import { useState, useEffect } from "react";
 import "../../styles/auth.css";
+import { users } from "../../data/users";
 
 const EyeIcon = ({ visible }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -29,7 +29,7 @@ export default function Register() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Sync theme from localStorage
+  // Sync theme
   useEffect(() => {
     const saved = localStorage.getItem("sf-theme") || "light";
     document.documentElement.setAttribute("data-theme", saved);
@@ -46,8 +46,39 @@ export default function Register() {
     if (password !== confirmPassword) return setError("Passwords do not match.");
 
     setLoading(true);
-    // Simulate API call — replace with real auth logic
-    await new Promise((r) => setTimeout(r, 1100));
+    await new Promise((r) => setTimeout(r, 800));
+
+    const storedUsers =
+      JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+    const allUsers = [...users, ...storedUsers];
+
+    const emailExists = allUsers.some(
+      (u) => u.email.toLowerCase() === email.trim().toLowerCase()
+    );
+
+    if (emailExists) {
+      setLoading(false);
+      return setError("Email already registered.");
+    }
+
+    // ✅ FIXED USER OBJECT (SESUAI ERD)
+    const newUser = {
+      id: Date.now(),
+      name: email.split("@")[0],
+      email: email.trim(),
+      password,
+      role_id: 2,
+      onboarding_completed: false, // 🔥 WAJIB
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    localStorage.setItem(
+      "registeredUsers",
+      JSON.stringify([...storedUsers, newUser])
+    );
+
     setLoading(false);
     setSuccess("Account created! Redirecting to login…");
 
@@ -93,7 +124,6 @@ export default function Register() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder=""
             />
           </div>
 
@@ -107,7 +137,6 @@ export default function Register() {
                 type="button"
                 className="field-toggle"
                 onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <EyeIcon visible={showPassword} />
                 {showPassword ? "Hide" : "Show"}
@@ -120,7 +149,6 @@ export default function Register() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder=""
             />
           </div>
 
@@ -134,7 +162,6 @@ export default function Register() {
                 type="button"
                 className="field-toggle"
                 onClick={() => setShowConfirm((v) => !v)}
-                aria-label={showConfirm ? "Hide password" : "Show password"}
               >
                 <EyeIcon visible={showConfirm} />
                 {showConfirm ? "Hide" : "Show"}
@@ -147,7 +174,6 @@ export default function Register() {
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder=""
             />
           </div>
 
@@ -161,7 +187,7 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Footer — already have account */}
+        {/* Footer */}
         <div className="auth-footer">
           <hr />
           <p className="auth-footer-text">I Already Have an Account</p>

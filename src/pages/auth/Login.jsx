@@ -1,5 +1,7 @@
-// src/pages/public/login.jsx
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { users } from "../../data/users";
+import { roles } from "../../data/roles";
 import "../../styles/auth.css";
 
 export default function Login() {
@@ -9,7 +11,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Sync theme from localStorage (if landing page set it)
+  const navigate = useNavigate();
+
+  // Sync theme
   useEffect(() => {
     const saved = localStorage.getItem("sf-theme") || "light";
     document.documentElement.setAttribute("data-theme", saved);
@@ -23,12 +27,48 @@ export default function Login() {
     if (!password) return setError("Please enter your password.");
 
     setLoading(true);
-    // Simulate API call — replace with real auth logic
-    await new Promise((r) => setTimeout(r, 1000));
+
+    // Simulasi delay
+    await new Promise((r) => setTimeout(r, 500));
+
+    // Ambil user hasil register
+    const storedUsers =
+      JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+    // Gabungkan dengan dummy users
+    const allUsers = [...users, ...storedUsers];
+
+    // Cari user
+    let foundUser = allUsers.find(
+      (u) =>
+        u.email.toLowerCase() === email.toLowerCase() &&
+        u.password === password
+    );
+
     setLoading(false);
 
-    // Demo: always shows error so you can see the UI
-    setError("Invalid email or password. Please try again.");
+    if (!foundUser) {
+      return setError("Invalid email or password. Please try again.");
+    }
+
+    if (foundUser.onboarding_completed === undefined) {
+      foundUser = {
+        ...foundUser,
+        onboarding_completed: false,
+      };
+    }
+
+    // Ambil role
+    const role = roles.find((r) => r.id === foundUser.role_id);
+
+    // Simpan session login
+    localStorage.setItem("user", JSON.stringify(foundUser));
+
+    if (role?.name === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/dashboard";
+    }
   };
 
   return (
@@ -67,7 +107,6 @@ export default function Login() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder=""
             />
           </div>
 
@@ -81,23 +120,7 @@ export default function Login() {
                 type="button"
                 className="field-toggle"
                 onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {/* Eye-slash icon */}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  {showPassword ? (
-                    <>
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </>
-                  ) : (
-                    <>
-                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                      <line x1="1" y1="1" x2="23" y2="23"/>
-                    </>
-                  )}
-                </svg>
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
@@ -108,7 +131,6 @@ export default function Login() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder=""
             />
             <a className="forgot-link" href="/forgot-password">
               Forget your password
@@ -125,14 +147,14 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Footer — sign up */}
+        {/* Footer */}
         <div className="auth-footer">
           <hr />
           <p className="auth-footer-text">Don't have an account?</p>
           <button
             className="btn-secondary"
             type="button"
-            onClick={() => (window.location.href = "/register")}
+            onClick={() => navigate("/register")}
           >
             Sign up
           </button>

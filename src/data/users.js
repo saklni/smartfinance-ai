@@ -5,8 +5,9 @@ export const users = [
     email: "admin@gmail.com",
     password: "123456",
     role_id: 1,
-    created_at: "2026-04-01T00:00:00Z",
-    updated_at: "2026-04-01T00:00:00Z"
+    onboarding_completed: true,
+    created_at: "2026-01-01",
+    updated_at: "2026-01-01"
   },
   {
     id: 2,
@@ -14,7 +15,18 @@ export const users = [
     email: "sakhi@gmail.com",
     password: "123456",
     role_id: 2,
-    created_at: "2026-04-10T00:00:00Z",
-    updated_at: "2026-04-10T00:00:00Z"
+    onboarding_completed: false,
+    created_at: "2026-01-02",
+    updated_at: "2026-01-02"
+  },
+  {
+    id: 3,
+    name: "Budi",
+    email: "budi@gmail.com",
+    password: "123456",
+    role_id: 2,
+    onboarding_completed: true,
+    created_at: "2026-01-03",
+    updated_at: "2026-01-03"
   }
 ];
