@@ -1,7 +1,7 @@
+// src/pages/auth/Login.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { users } from "../../data/users";
-import { roles } from "../../data/roles";
+import { useAuth } from "../../contexts/useAuth";
 import "../../styles/auth.css";
 
 export default function Login() {
@@ -12,8 +12,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // Sync theme
   useEffect(() => {
     const saved = localStorage.getItem("sf-theme") || "light";
     document.documentElement.setAttribute("data-theme", saved);
@@ -27,78 +27,40 @@ export default function Login() {
     if (!password) return setError("Please enter your password.");
 
     setLoading(true);
+    try {
+      const user = await login(email, password);
 
-    // Simulasi delay
-    await new Promise((r) => setTimeout(r, 500));
-
-    // Ambil user hasil register
-    const storedUsers =
-      JSON.parse(localStorage.getItem("registeredUsers")) || [];
-
-    // Gabungkan dengan dummy users
-    const allUsers = [...users, ...storedUsers];
-
-    // Cari user
-    let foundUser = allUsers.find(
-      (u) =>
-        u.email.toLowerCase() === email.toLowerCase() &&
-        u.password === password
-    );
-
-    setLoading(false);
-
-    if (!foundUser) {
-      return setError("Invalid email or password. Please try again.");
-    }
-
-    if (foundUser.onboarding_completed === undefined) {
-      foundUser = {
-        ...foundUser,
-        onboarding_completed: false,
-      };
-    }
-
-    // Ambil role
-    const role = roles.find((r) => r.id === foundUser.role_id);
-
-    // Simpan session login
-    localStorage.setItem("user", JSON.stringify(foundUser));
-
-    if (role?.name === "admin") {
-      window.location.href = "/admin";
-    } else {
-      window.location.href = "/dashboard";
+      // Gunakan navigate() bukan window.location.href
+      if (user.role === "admin" || user.role_id === 1) {
+        navigate("/admin", { replace: true });
+      } else if (!user.onboarding_completed) {
+        navigate("/onboarding", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-
-        {/* Brand */}
         <div className="auth-brand">
-          <span className="auth-brand-name">
-            Smart<span>Finance</span> AI
-          </span>
+          <span className="auth-brand-name">Smart<span>Finance</span> AI</span>
         </div>
 
-        {/* Title */}
         <h1 className="auth-title">Log in</h1>
-
         <hr className="auth-divider" />
 
-        {/* Error */}
         {error && <div className="auth-error">{error}</div>}
 
-        {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
-
-          {/* Email */}
           <div className="form-field">
             <div className="field-header">
-              <label className="field-label" htmlFor="login-email">
-                Email address
-              </label>
+              <label className="field-label" htmlFor="login-email">Email address</label>
             </div>
             <input
               id="login-email"
@@ -110,17 +72,10 @@ export default function Login() {
             />
           </div>
 
-          {/* Password */}
           <div className="form-field">
             <div className="field-header">
-              <label className="field-label" htmlFor="login-password">
-                Password
-              </label>
-              <button
-                type="button"
-                className="field-toggle"
-                onClick={() => setShowPassword((v) => !v)}
-              >
+              <label className="field-label" htmlFor="login-password">Password</label>
+              <button type="button" className="field-toggle" onClick={() => setShowPassword(v => !v)}>
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
@@ -132,34 +87,20 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <a className="forgot-link" href="/forgot-password">
-              Forget your password
-            </a>
           </div>
 
-          {/* Submit */}
-          <button
-            className="btn-primary"
-            type="submit"
-            disabled={loading}
-          >
+          <button className="btn-primary" type="submit" disabled={loading}>
             {loading ? "Logging in…" : "Log in"}
           </button>
         </form>
 
-        {/* Footer */}
         <div className="auth-footer">
           <hr />
           <p className="auth-footer-text">Don't have an account?</p>
-          <button
-            className="btn-secondary"
-            type="button"
-            onClick={() => navigate("/register")}
-          >
+          <button className="btn-secondary" type="button" onClick={() => navigate("/register")}>
             Sign up
           </button>
         </div>
-
       </div>
     </div>
   );

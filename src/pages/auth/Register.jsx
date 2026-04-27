@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../../services/authService";
 import "../../styles/auth.css";
-import { users } from "../../data/users";
 
 const EyeIcon = ({ visible }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -28,6 +29,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Sync theme
   useEffect(() => {
@@ -46,45 +48,20 @@ export default function Register() {
     if (password !== confirmPassword) return setError("Passwords do not match.");
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
 
-    const storedUsers =
-      JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    try {
+      await authService.register(email, password);
+      
+      setSuccess("Account created! Redirecting to login…");
 
-    const allUsers = [...users, ...storedUsers];
-
-    const emailExists = allUsers.some(
-      (u) => u.email.toLowerCase() === email.trim().toLowerCase()
-    );
-
-    if (emailExists) {
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 1800);
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-      return setError("Email already registered.");
     }
-
-    // ✅ FIXED USER OBJECT (SESUAI ERD)
-    const newUser = {
-      id: Date.now(),
-      name: email.split("@")[0],
-      email: email.trim(),
-      password,
-      role_id: 2,
-      onboarding_completed: false, // 🔥 WAJIB
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    localStorage.setItem(
-      "registeredUsers",
-      JSON.stringify([...storedUsers, newUser])
-    );
-
-    setLoading(false);
-    setSuccess("Account created! Redirecting to login…");
-
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 1800);
   };
 
   return (
@@ -194,7 +171,7 @@ export default function Register() {
           <button
             className="btn-secondary"
             type="button"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => (navigate("/login", { replace: true }))}
           >
             Log in
           </button>

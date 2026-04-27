@@ -1,5 +1,10 @@
-const Dashboard = () => {
-  return <h1>Admin Dashboard</h1>;
+const AdminDashboard = () => {
+  return (
+    <div style={{ padding: "40px" }}>
+      <h1>Admin Dashboard</h1>
+      <p>Coming soon... (Admin panel akan dibuat nanti)</p>
+    </div>
+  );
 };
 
-export default Dashboard;
+export default AdminDashboard;

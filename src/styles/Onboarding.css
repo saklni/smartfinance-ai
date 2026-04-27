@@ -1,0 +1,610 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* =============================================
+   CSS VARIABLES — sama persis dengan landing
+   ============================================= */
+:root {
+  --bg-primary:     #ffffff;
+  --bg-secondary:   #f0f2f8;
+  --bg-card:        #ffffff;
+  --bg-hero-badge:  #eef0ff;
+
+  --text-primary:   #0d0f1c;
+  --text-secondary: #5a6072;
+  --text-muted:     #8891a8;
+
+  --accent-blue:        #3b5bfc;
+  --accent-blue-hover:  #2944e0;
+  --accent-purple:      #6c40f7;
+
+  --border-color:       #e4e7f0;
+  --card-shadow:        0 2px 16px rgba(59, 91, 252, 0.07);
+  --card-shadow-hover:  0 8px 32px rgba(59, 91, 252, 0.14);
+
+  --input-bg:       #eef0ff;
+  --btn-back-bg:    #e5e9f5;
+  --btn-back-color: #4a5578;
+  --btn-back-hover: #d8ddf0;
+  --toggle-off-bg:  #d1d5e8;
+  --progress-track: #dde2f0;
+  --pct-grey:       #9aa3bf;
+
+  --transition: 0.3s ease;
+}
+
+[data-theme="dark"] {
+  --bg-primary:     #0b0d1a;
+  --bg-secondary:   #111326;
+  --bg-card:        #161929;
+  --bg-hero-badge:  #1e2240;
+
+  --text-primary:   #f0f2ff;
+  --text-secondary: #9aa3c2;
+  --text-muted:     #5d6585;
+
+  --accent-blue:        #5b78ff;
+  --accent-blue-hover:  #7491ff;
+  --accent-purple:      #8a62ff;
+
+  --border-color:       #222640;
+  --card-shadow:        0 2px 16px rgba(0, 0, 0, 0.35);
+  --card-shadow-hover:  0 8px 32px rgba(91, 120, 255, 0.2);
+
+  --input-bg:       #1e2240;
+  --btn-back-bg:    #1e2240;
+  --btn-back-color: #9aa3c2;
+  --btn-back-hover: #262b4a;
+  --toggle-off-bg:  #2e3254;
+  --progress-track: #1e2240;
+  --pct-grey:       #5d6585;
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============================================
+   ROOT
+   ============================================= */
+.onboarding-root {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.ob-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: var(--bg-secondary);
+  transition: background var(--transition);
+}
+
+.ob-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.ob-logo span.accent {
+  color: var(--accent-blue);
+}
+
+.ob-back-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color var(--transition);
+}
+
+.ob-help-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-blue);
+  font-size: 14px;
+  font-weight: 700;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+/* =============================================
+   PROGRESS BAR
+   ============================================= */
+.ob-progress-wrap {
+  padding: 0 28px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ob-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ob-step-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ob-pct-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  transition: color var(--transition);
+}
+
+.ob-pct-label.grey {
+  color: var(--pct-grey);
+}
+
+.ob-progress-track {
+  height: 7px;
+  background: var(--progress-track);
+  border-radius: 99px;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+
+.ob-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  transition: width 0.4s ease;
+}
+
+/* =============================================
+   CONTENT AREA
+   ============================================= */
+.ob-content {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 28px 16px 40px;
+}
+
+/* =============================================
+   CARD
+   ============================================= */
+.ob-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  max-width: 580px;
+  padding: 44px 44px 36px;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+.ob-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  transition: color var(--transition);
+}
+
+.ob-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  transition: color var(--transition);
+}
+
+/* =============================================
+   STEP 1 — INCOME
+   ============================================= */
+.income-icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--bg-hero-badge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  transition: background var(--transition);
+}
+
+.income-icon-wrap svg {
+  color: var(--accent-blue);
+}
+
+.income-input-wrap {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 62px;
+  margin-bottom: 36px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.income-dollar {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 8px;
+}
+
+.income-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.income-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ob-btn-center {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-next-arrow {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.2s, transform 0.15s, box-shadow var(--transition);
+}
+
+.btn-next-arrow:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(59, 91, 252, 0.4);
+}
+
+/* =============================================
+   STEP 2 & 3 — SELECTION CARDS
+   ============================================= */
+.ob-select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.ob-select-grid.full-last > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.ob-select-card {
+  background: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 18px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.ob-select-card.selected {
+  border-color: var(--accent-blue);
+  background: var(--bg-card);
+}
+
+.ob-select-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+/* Light mode icon backgrounds */
+.ob-select-icon.purple { background: #ede9fe; }
+.ob-select-icon.blue   { background: #dbeafe; }
+.ob-select-icon.green  { background: #d1fae5; }
+.ob-select-icon.red    { background: #fee2e2; }
+.ob-select-icon.grey   { background: var(--bg-hero-badge); }
+.ob-select-icon.indigo { background: #e0e7ff; }
+
+/* Dark mode icon backgrounds */
+[data-theme="dark"] .ob-select-icon.purple { background: #2d1f5e; }
+[data-theme="dark"] .ob-select-icon.blue   { background: #162040; }
+[data-theme="dark"] .ob-select-icon.green  { background: #0d2e22; }
+[data-theme="dark"] .ob-select-icon.red    { background: #2e1212; }
+[data-theme="dark"] .ob-select-icon.grey   { background: var(--bg-hero-badge); }
+[data-theme="dark"] .ob-select-icon.indigo { background: #1a1f4a; }
+
+.ob-select-icon.selected-bg {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+.ob-select-text {
+  flex: 1;
+}
+
+.ob-select-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  transition: color var(--transition);
+}
+
+.ob-select-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  transition: color var(--transition);
+}
+
+.ob-check {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* =============================================
+   NAV BUTTONS
+   ============================================= */
+.ob-nav {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btn-back {
+  flex: 1;
+  background: var(--btn-back-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--btn-back-color);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn-back:hover {
+  background: var(--btn-back-hover);
+}
+
+.btn-next {
+  flex: 2;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow var(--transition);
+}
+
+.btn-next:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(59, 91, 252, 0.4);
+}
+
+/* =============================================
+   STEP 4 — AI PREFERENCES
+   ============================================= */
+.ai-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--bg-hero-badge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  font-size: 30px;
+  transition: background var(--transition);
+}
+
+.ai-toggle-row {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.ai-toggle-label {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color var(--transition);
+}
+
+.toggle-switch {
+  width: 48px;
+  height: 26px;
+  background: var(--accent-blue);
+  border-radius: 99px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  flex-shrink: 0;
+}
+
+.toggle-switch.off {
+  background: var(--toggle-off-bg);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.off .toggle-knob {
+  transform: translateX(-22px);
+}
+
+.ai-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.ai-feature-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 14px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.ai-feature-icon {
+  font-size: 18px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.ai-feature-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  transition: color var(--transition);
+}
+
+.ai-feature-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  transition: color var(--transition);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+  .ob-header {
+    padding: 14px 16px;
+  }
+
+  .ob-progress-wrap {
+    padding: 0 16px;
+  }
+
+  .ob-card {
+    padding: 28px 20px 24px;
+    border-radius: 18px;
+  }
+
+  .ob-title {
+    font-size: 22px;
+  }
+
+  .ob-select-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ob-select-grid.full-last > :last-child:nth-child(odd) {
+    grid-column: unset;
+  }
+
+  .ai-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-next-arrow {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ob-nav {
+    flex-direction: column-reverse;
+  }
+
+  .btn-back,
+  .btn-next {
+    flex: none;
+    width: 100%;
+  }
+}

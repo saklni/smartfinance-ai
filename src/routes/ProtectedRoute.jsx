@@ -1,15 +1,23 @@
+// src/routes/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/useAuth";
 
 export default function ProtectedRoute({ children, role }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, loading } = useAuth();
 
-  // belum login
+  // Masih loading data user
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  // Belum login → redirect ke login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // role tidak sesuai
+  // Kalau ada pengecekan role dan tidak sesuai
   if (role && user.role_id !== role) {
+    // Redirect ke halaman yang sesuai dengan role-nya
     if (user.role_id === 2) {
       return <Navigate to="/dashboard" replace />;
     }
@@ -18,9 +26,6 @@ export default function ProtectedRoute({ children, role }) {
     }
   }
 
-  if (user.role_id === 2 && user.onboarding_completed === false) {
-    return <Navigate to="/onboarding" replace />;
-  }
-
+  // Semua aman → tampilkan children
   return children;
 }
