@@ -18,7 +18,6 @@ export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Nama field disesuaikan dengan kolom di user_preferences (ERD)
   const [onboardingData, setOnboardingData] = useState({
     monthlyIncome: 0,    // → monthly_income
     mainExpense: "transport",  // → main_expense
@@ -46,9 +45,6 @@ export default function Onboarding() {
     if (!user) return;
     setLoading(true);
     try {
-      // userService.updateUser akan:
-      // 1. Update onboarding_completed di tabel users
-      // 2. Simpan monthlyIncome, mainExpense, financialGoal, aiEnabled ke user_preferences
       const updatedUser = await userService.updateUser({
         onboarding_completed: true,
         monthlyIncome: onboardingData.monthlyIncome,
