@@ -3,8 +3,8 @@
 const GOALS = [
   {
     id: "save",
-    title: "Save money",
-    desc: "Build an emergency fund or buffer.",
+    title: "Menabung",
+    desc: "Membangun dana darurat atau cadangan.",
     iconBg: "grey",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -15,8 +15,8 @@ const GOALS = [
   },
   {
     id: "reduce",
-    title: "Reduce expenses",
-    desc: "Optimize your monthly spending.",
+    title: "Mengurangi pengeluaran",
+    desc: "Mengoptimalkan pengeluaran bulanan.",
     iconBg: "grey",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -29,8 +29,8 @@ const GOALS = [
   },
   {
     id: "invest",
-    title: "Investment",
-    desc: "Grow your wealth over the long term.",
+    title: "Investasi",
+    desc: "Mengembangkan aset untuk jangka panjang.",
     iconBg: "indigo",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -42,13 +42,15 @@ const GOALS = [
   },
   {
     id: "others",
-    title: "Others",
-    desc: "A custom or mixed financial target.",
+    title: "Lainnya",
+    desc: "Tujuan keuangan lainnya.",
     iconBg: "grey",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        <circle cx="12" cy="12" r="1"/>
+        <circle cx="19" cy="12" r="1"/>
+        <circle cx="5" cy="12" r="1"/>
       </svg>
     ),
   },
@@ -58,11 +60,10 @@ export default function StepGoal({ nextStep, prevStep, selected, setSelected }) 
   return (
     <div className="ob-card">
       <h1 className="ob-title" style={{ marginBottom: 12 }}>
-        What is your financial goal?
+        Apa tujuan keuangan Anda?
       </h1>
       <p className="ob-subtitle" style={{ marginBottom: 28 }}>
-        We'll tailor your experience and insights based on what<br/>
-        you want to achieve.
+        Kami akan menyesuaikan fitur dan insight berdasarkan tujuan yang ingin Anda capai.
       </p>
 
       <div className="ob-select-grid">
@@ -87,8 +88,8 @@ export default function StepGoal({ nextStep, prevStep, selected, setSelected }) 
       </div>
 
       <div className="ob-nav">
-        <button className="btn-back" onClick={prevStep}>Back</button>
-        <button className="btn-next" onClick={nextStep}>Next Step</button>
+        <button className="btn-back" onClick={prevStep}>Kembali</button>
+        <button className="btn-next" onClick={nextStep}>Lanjut</button>
       </div>
     </div>
   );

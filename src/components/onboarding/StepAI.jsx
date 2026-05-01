@@ -3,8 +3,8 @@
 const AI_FEATURES = [
   {
     id: "trend",
-    title: "Trend Detection",
-    desc: "Predictive spending analysis based on history.",
+    title: "Deteksi Tren",
+    desc: "Analisis pengeluaran berdasarkan riwayat.",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="#4361ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -15,8 +15,8 @@ const AI_FEATURES = [
   },
   {
     id: "goals",
-    title: "Smart Goals",
-    desc: "AI-driven saving velocity adjustments.",
+    title: "Target Pintar",
+    desc: "Penyesuaian tabungan secara otomatis.",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="#4361ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,8 +26,8 @@ const AI_FEATURES = [
   },
   {
     id: "feed",
-    title: "Curated Feed",
-    desc: "A financial news cycle tailored to you.",
+    title: "Rekomendasi",
+    desc: "Insight keuangan yang disesuaikan untuk Anda.",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -49,23 +49,23 @@ export default function StepAI({
   return (
     <div className="ob-card">
       <div className="ai-icon-wrap">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4361ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+          stroke="#4361ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
           <circle cx="12" cy="12" r="3"/>
         </svg>
       </div>
 
       <h1 className="ob-title" style={{ marginBottom: 14 }}>
-        The Intelligent Atmosphere
+        Fitur AI
       </h1>
       <p className="ob-subtitle" style={{ marginBottom: 24 }}>
-        Our AI concierge can curate your financial narrative,<br/>
-        spotting trends before they happen. Shall we enable<br/>
-        recommendations?
+        Aktifkan AI untuk membantu menganalisis pengeluaran,<br/>
+        memberikan insight, dan rekomendasi keuangan secara otomatis.
       </p>
 
       <div className="ai-toggle-row">
-        <span className="ai-toggle-label">Do you want AI recommendations?</span>
+        <span className="ai-toggle-label">Aktifkan rekomendasi AI?</span>
         <button
           className={`toggle-switch${aiEnabled ? "" : " off"}`}
           onClick={() => setAiEnabled((v) => !v)}
@@ -86,13 +86,13 @@ export default function StepAI({
       </div>
 
       <div className="ob-nav">
-        <button className="btn-back" onClick={prevStep}>Back</button>
+        <button className="btn-back" onClick={prevStep}>Kembali</button>
         <button 
           className="btn-next" 
           onClick={onFinish}
           disabled={loading}
         >
-          {loading ? "Saving..." : "Next Step"}
+          {loading ? "Menyimpan..." : "Selesai"}
         </button>
       </div>
     </div>

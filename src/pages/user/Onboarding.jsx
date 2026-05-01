@@ -53,7 +53,10 @@ export default function Onboarding() {
         aiEnabled: onboardingData.aiEnabled,
       });
 
-      updateUser(updatedUser);
+      // Pastikan state auth ter-update dengan data terbaru dari localStorage
+      const finalUser = { ...updatedUser, onboarding_completed: true };
+      localStorage.setItem("user", JSON.stringify(finalUser));
+      updateUser(finalUser);
       navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Failed to complete onboarding:", error);
@@ -129,7 +132,10 @@ export default function Onboarding() {
             prevStep={prevStep}
             onFinish={handleFinish}
             aiEnabled={onboardingData.aiEnabled}
-            setAiEnabled={val => updateOnboardingData({ aiEnabled: val })}
+            setAiEnabled={(val) => {
+              const next = typeof val === "function" ? val(onboardingData.aiEnabled) : val;
+              updateOnboardingData({ aiEnabled: next });
+            }}
             loading={loading}
           />
         )}

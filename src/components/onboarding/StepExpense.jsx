@@ -3,8 +3,8 @@
 const EXPENSES = [
   {
     id: "food",
-    title: "Food",
-    desc: "Dining, groceries, delivery",
+    title: "Makanan",
+    desc: "Makan, belanja bahan makanan, delivery",
     iconBg: "purple",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -17,8 +17,8 @@ const EXPENSES = [
   },
   {
     id: "transport",
-    title: "Transport",
-    desc: "Fuel, public transit, ride-share",
+    title: "Transportasi",
+    desc: "BBM, transport umum, ojek/ride",
     iconBg: "blue",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -32,8 +32,8 @@ const EXPENSES = [
   },
   {
     id: "shopping",
-    title: "Shopping",
-    desc: "Clothes, tech, home goods",
+    title: "Belanja",
+    desc: "Pakaian, gadget, kebutuhan rumah",
     iconBg: "green",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -46,8 +46,8 @@ const EXPENSES = [
   },
   {
     id: "entertainment",
-    title: "Entertainment",
-    desc: "Movies, gaming, events",
+    title: "Hiburan",
+    desc: "Film, game, acara",
     iconBg: "red",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -59,13 +59,15 @@ const EXPENSES = [
   },
   {
     id: "others",
-    title: "Others",
-    desc: "Bills, health, education, miscellaneous",
+    title: "Lainnya",
+    desc: "Tagihan, kesehatan, pendidikan, dll",
     iconBg: "grey",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+        <circle cx="12" cy="12" r="1"/>
+        <circle cx="19" cy="12" r="1"/>
+        <circle cx="5" cy="12" r="1"/>
       </svg>
     ),
   },
@@ -75,11 +77,10 @@ export default function StepExpense({ nextStep, prevStep, selected, setSelected 
   return (
     <div className="ob-card">
       <h1 className="ob-title" style={{ textAlign: "left", marginBottom: 10 }}>
-        What is your main expense?
+        Pengeluaran utama Anda apa?
       </h1>
       <p className="ob-subtitle" style={{ textAlign: "left", marginBottom: 24 }}>
-        This helps Lucid Ledger tailor your insights and categorize<br/>
-        your future transactions automatically.
+        Ini membantu sistem memahami pola pengeluaran Anda dan mengelompokkan transaksi secara otomatis.
       </p>
 
       <div className="ob-select-grid full-last">
@@ -112,8 +113,8 @@ export default function StepExpense({ nextStep, prevStep, selected, setSelected 
       </div>
 
       <div className="ob-nav">
-        <button className="btn-back" onClick={prevStep}>Back</button>
-        <button className="btn-next" onClick={nextStep}>Next Step</button>
+        <button className="btn-back" onClick={prevStep}>Kembali</button>
+        <button className="btn-next" onClick={nextStep}>Lanjut</button>
       </div>
     </div>
   );
